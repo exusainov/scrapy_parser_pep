@@ -86,3 +86,26 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+FEEDS = {
+    # Имя файла для сохранения данных теперь указываем здесь,
+    # а не при вызове паука из консоли.
+    'results/pep_%(time)s.csv': {
+        # Формат файла.
+        'format': 'csv',
+        # Поля, данные из которых будут выведены в файл, и их порядок.
+        # Выведем в этот файл только два поля из трёх.
+        'fields': ['number', 'name', 'status'],
+        # Если файл с заданным именем уже существует, то
+        # при значении False данные будут дописываться в существующий файл;
+        # при значении True существующий файл будет перезаписан.
+        'overwrite': True
+    },
+    # И ещё один файл.
+    # 'quotes_author.csv': {
+    #     'format': 'csv',
+    #     # В этот файл попадёт только список авторов.
+    #     'fields': ['author'],
+    #     'overwrite': True
+    # },
+}
