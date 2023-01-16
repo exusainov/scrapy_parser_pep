@@ -10,4 +10,5 @@ from itemadapter import ItemAdapter
 
 class PepParsePipeline:
     def process_item(self, item, spider):
+        print(item, 'я тут')
         return item
