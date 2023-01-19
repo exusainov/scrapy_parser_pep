@@ -1,9 +1,4 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
+import csv
 import datetime as dt
 from collections import defaultdict
 from pathlib import Path
@@ -13,10 +8,9 @@ DATETIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
 
 
 class PepParsePipeline:
-    RESULT_COUNT = defaultdict(int)
 
     def open_spider(self, spider):
-        pass
+        self.RESULT_COUNT = defaultdict(int)
 
     def process_item(self, item, spider):
 
@@ -32,9 +26,9 @@ class PepParsePipeline:
         now_formatted = now.strftime(DATETIME_FORMAT)
         file_name = f'status_summary_{now_formatted}.csv'
         file_path = results_dir / file_name
-        print('я тут')
-        with open(file_path, mode='w', encoding='utf-8') as f:
-            f.write('Статус,Количество\n')
+        with open(file_path, 'w', encoding='utf-8') as f:
+            writer = csv.writer(f, dialect='unix')
+            writer.writerow(['Статус', 'Количество'])
             for value, key in self.RESULT_COUNT.items():
-                f.write(f'{value},{key}\n')
-            f.write(f'Total,{total}\n')
+                writer.writerow([value, key])
+            writer.writerow(['Total', total])

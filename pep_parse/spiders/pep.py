@@ -1,3 +1,5 @@
+import re
+
 import scrapy
 
 from pep_parse.items import PepParseItem
@@ -18,13 +20,15 @@ class PepSpider(scrapy.Spider):
     def parse_pep(self, response):
         page_title = str(
             response.xpath('//h1[@class="page-title"]/text()').get())
-        name_number_pars = page_title.split(' – ', 1)
-        number = name_number_pars[0].replace('PEP ', '')
+        pattern = r'(?P<number>\d+) – (?P<name>.*)'
+        text_pars = re.search(pattern, page_title)
+        number = text_pars.group('number')
+        name = text_pars.group('name')
         status = response.css(
             'dt:contains("Status")').xpath('//abbr/text()').get()
         data = {
             'number': number,
-            'name': name_number_pars[1],
+            'name': name,
             'status': status
         }
         yield PepParseItem(data)
